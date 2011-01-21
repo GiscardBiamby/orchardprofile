@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Contrib.Profile.Services;
 using Orchard;
 using Orchard.ContentManagement;
+using Orchard.ContentManagement.Handlers;
 using Orchard.Localization;
 using Orchard.Mvc;
 using Orchard.Security;
@@ -11,13 +13,16 @@ namespace Contrib.Profile.Controllers {
     public class AdminController : Controller, IUpdateModel {
 
         private readonly IMembershipService _membershipService;
+        private readonly IProfileService _profileService;
 
         public AdminController(IOrchardServices services,
-            IMembershipService membershipService) {
-
-            Services = services;
+            IMembershipService membershipService,
+            IProfileService profileService) {
 
             _membershipService = membershipService;
+            _profileService = profileService;
+
+            Services = services;
         }
 
         private IOrchardServices Services { get; set; }
@@ -28,11 +33,9 @@ namespace Contrib.Profile.Controllers {
                 return new HttpUnauthorizedResult();
 
             IUser user = _membershipService.GetUser(username);
-            IList<dynamic> parts = user.ContentItem.Parts
-                .Where(part => part.Settings.Any(anyPart => anyPart.Key == "Stereotype" && anyPart.Value == "Profile"))
-                .Select(part => Services.ContentManager.BuildDisplay(part)).ToList();
 
-            dynamic shape = Services.New.Details().AddRange(parts);
+            dynamic shape = _profileService.BuildProfileDisplay(user);
+            // dynamic shape = Services.ContentManager.BuildDisplay(user);
 
             return new ShapeResult(this, shape); 
         }
