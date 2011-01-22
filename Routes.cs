@@ -12,15 +12,38 @@ namespace Contrib.Profile {
 
         public IEnumerable<RouteDescriptor> GetRoutes() {
             return new[] {
+                            // higher priority than Profile/{username} as Edit could be interpreted as a username
+                             new RouteDescriptor {   Priority = 6,
+                                                     Route = new Route(
+                                                         "Profile/Edit",
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "Contrib.Profile"},
+                                                                                      {"controller", "Home"},
+                                                                                      {"action", "Edit"},
+
+                                                         },
+                                                         new RouteValueDictionary (),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "Contrib.Profile"}
+                                                                                  },
+                                                         new MvcRouteHandler())
+
+                             },
                              new RouteDescriptor {   Priority = 5,
                                                      Route = new Route(
                                                          "Profile/{username}",
                                                          new RouteValueDictionary {
                                                                                       {"area", "Contrib.Profile"},
                                                                                       {"controller", "Home"},
-                                                                                      {"action", "Index"}
+                                                                                      {"action", "Index"},
+
                                                          },
+                                                         new RouteValueDictionary (),
+                                                         new RouteValueDictionary {
+                                                                                      {"area", "Contrib.Profile"}
+                                                                                  },
                                                          new MvcRouteHandler())
+
                              }
                          };
         }

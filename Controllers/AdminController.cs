@@ -34,8 +34,7 @@ namespace Contrib.Profile.Controllers {
 
             IUser user = _membershipService.GetUser(username);
 
-            dynamic shape = _profileService.BuildProfileDisplay(user);
-            // dynamic shape = Services.ContentManager.BuildDisplay(user);
+            dynamic shape = Services.ContentManager.BuildDisplay(user);
 
             return new ShapeResult(this, shape); 
         }
@@ -45,11 +44,9 @@ namespace Contrib.Profile.Controllers {
                 return new HttpUnauthorizedResult();
 
             IUser user = _membershipService.GetUser(username);
-            IList<dynamic> parts = user.ContentItem.Parts
-                .Where(part => part.Settings.Any(anyPart => anyPart.Key == "Stereotype" && anyPart.Value == "Profile"))
-                .Select(part => Services.ContentManager.BuildEditor(part)).ToList();
+            dynamic shape = Services.ContentManager.BuildEditor(user);
 
-            return View((object) parts);
+            return new ShapeResult(this, shape);
         }
 
         bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
