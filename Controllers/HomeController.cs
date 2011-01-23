@@ -2,7 +2,6 @@
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Localization;
-using Orchard.Mvc;
 using Orchard.Security;
 using Orchard.Themes;
 using Orchard.UI.Notify;
@@ -14,7 +13,8 @@ namespace Contrib.Profile.Controllers {
         private readonly IMembershipService _membershipService;
 
         public HomeController(IOrchardServices services,
-            IMembershipService membershipService) {
+            IMembershipService membershipService
+            ) {
 
             _membershipService = membershipService;
 
@@ -25,10 +25,14 @@ namespace Contrib.Profile.Controllers {
         public Localizer T { get; set; }
 
         public ActionResult Index(string username) {
+            if (!Services.Authorizer.Authorize(Permissions.ViewProfiles, T("Not allowed to view profiles")))
+                return new HttpUnauthorizedResult();
+
             IUser user = _membershipService.GetUser(username);
+
             dynamic shape = Services.ContentManager.BuildDisplay(user.ContentItem);
 
-            return new ShapeResult(this, shape);
+            return View((object)shape);
         }
 
         public ActionResult Edit() {
@@ -37,7 +41,8 @@ namespace Contrib.Profile.Controllers {
             }
 
             IUser user = Services.WorkContext.CurrentUser;
-            dynamic shape = Services.ContentManager.BuildEditor(user);
+
+            dynamic shape = Services.ContentManager.BuildEditor(user.ContentItem);
 
             return View((object)shape);
         }
@@ -50,7 +55,7 @@ namespace Contrib.Profile.Controllers {
 
             IUser user = Services.WorkContext.CurrentUser;
 
-            dynamic shape = Services.ContentManager.UpdateEditor(user, this);
+            dynamic shape = Services.ContentManager.UpdateEditor(user.ContentItem, this);
             if (!ModelState.IsValid) {
                 Services.TransactionManager.Cancel();
                 return View("Edit", (object)shape);
@@ -61,7 +66,8 @@ namespace Contrib.Profile.Controllers {
             return RedirectToAction("Edit");
         }
 
-        bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
+        bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties)
+        {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);
         }
 
