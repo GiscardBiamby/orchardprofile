@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using Contrib.Profile.Services;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Localization;
@@ -13,14 +12,11 @@ namespace Contrib.Profile.Controllers {
     public class HomeController : Controller, IUpdateModel {
 
         private readonly IMembershipService _membershipService;
-        private readonly IProfileService _profileService;
 
         public HomeController(IOrchardServices services,
-            IMembershipService membershipService,
-            IProfileService profileService) {
+            IMembershipService membershipService) {
 
             _membershipService = membershipService;
-            _profileService = profileService;
 
             Services = services;
         }
@@ -28,10 +24,8 @@ namespace Contrib.Profile.Controllers {
         private IOrchardServices Services { get; set; }
         public Localizer T { get; set; }
 
-        public ActionResult Index(string username)
-        {
+        public ActionResult Index(string username) {
             IUser user = _membershipService.GetUser(username);
-
             dynamic shape = Services.ContentManager.BuildDisplay(user.ContentItem);
 
             return new ShapeResult(this, shape);
@@ -43,8 +37,7 @@ namespace Contrib.Profile.Controllers {
             }
 
             IUser user = Services.WorkContext.CurrentUser;
-
-            dynamic shape = Services.ContentManager.BuildEditor(user.ContentItem);
+            dynamic shape = Services.ContentManager.BuildEditor(user);
 
             return View((object)shape);
         }
@@ -57,7 +50,7 @@ namespace Contrib.Profile.Controllers {
 
             IUser user = Services.WorkContext.CurrentUser;
 
-            dynamic shape = Services.ContentManager.UpdateEditor(user.ContentItem, this);
+            dynamic shape = Services.ContentManager.UpdateEditor(user, this);
             if (!ModelState.IsValid) {
                 Services.TransactionManager.Cancel();
                 return View("Edit", (object)shape);
@@ -68,8 +61,7 @@ namespace Contrib.Profile.Controllers {
             return RedirectToAction("Edit");
         }
 
-        bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties)
-        {
+        bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);
         }
 

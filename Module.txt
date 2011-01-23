@@ -1,10 +1,12 @@
 Name: Contrib.Profile
 AntiForgery: enabled
-Author: The Orchard Team
+Author: André Rodrigues, Sebastien Ros
 Website: http://orchardproject.net
-Version: 1.0
+Version: 0.9
 OrchardVersion: 1.0
-Description: Description for the module
+Description: Provides generic implementation of user profiles.
 Features:
     Contrib.Profile:
-        Description: Description for feature Contrib.Profile.
+        Description: Generic implementation of user profiles.
+        Category: Core
+        Dependencies: Orchard.Users
