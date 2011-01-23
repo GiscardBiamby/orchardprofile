@@ -6,7 +6,7 @@ namespace Contrib.Profile {
         public int Create() {
             ContentDefinitionManager.AlterTypeDefinition("User",
                 cfg => cfg
-                    .WithPart("ProfilePart", part => part.WithSetting("Stereotype", "Profile"))
+                    .WithPart("ProfilePart")
                 );
 
             return 1;

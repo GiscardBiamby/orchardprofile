@@ -1,10 +1,12 @@
-Name: Contrib.Profile
+Name: Profile
 AntiForgery: enabled
-Author: The Orchard Team
+Author: André Rodrigues, Sébastien Ros
 Website: http://orchardproject.net
 Version: 1.0
 OrchardVersion: 1.0
-Description: Description for the module
+Description: Adds a set of functionalities to display and edit users' profile.
 Features:
-    Contrib.Profile:
-        Description: Description for feature Contrib.Profile.
+    Profile:
+        Description: Adds a set of functionalities to display and edit users' profile.
+		Category: Content
+		Dependencies: Contrib.FieldExtensions

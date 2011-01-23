@@ -1,9 +1,7 @@
 ﻿using System.Web.Mvc;
-using Contrib.Profile.Services;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Localization;
-using Orchard.Mvc;
 using Orchard.Security;
 using Orchard.Themes;
 using Orchard.UI.Notify;
@@ -13,14 +11,12 @@ namespace Contrib.Profile.Controllers {
     public class HomeController : Controller, IUpdateModel {
 
         private readonly IMembershipService _membershipService;
-        private readonly IProfileService _profileService;
 
         public HomeController(IOrchardServices services,
-            IMembershipService membershipService,
-            IProfileService profileService) {
+            IMembershipService membershipService
+            ) {
 
             _membershipService = membershipService;
-            _profileService = profileService;
 
             Services = services;
         }
@@ -28,13 +24,15 @@ namespace Contrib.Profile.Controllers {
         private IOrchardServices Services { get; set; }
         public Localizer T { get; set; }
 
-        public ActionResult Index(string username)
-        {
+        public ActionResult Index(string username) {
+            if (!Services.Authorizer.Authorize(Permissions.ViewProfiles, T("Not allowed to view profiles")))
+                return new HttpUnauthorizedResult();
+
             IUser user = _membershipService.GetUser(username);
 
             dynamic shape = Services.ContentManager.BuildDisplay(user.ContentItem);
 
-            return new ShapeResult(this, shape);
+            return View((object)shape);
         }
 
         public ActionResult Edit() {
