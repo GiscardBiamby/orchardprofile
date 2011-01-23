@@ -9,4 +9,4 @@ Features:
     Profile:
         Description: Adds a set of functionalities to display and edit users' profile.
 		Category: Content
-		Dependencies: Contrib.FieldExtensions
+		Dependencies: Orchard.Users
