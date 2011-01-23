@@ -13,8 +13,7 @@ namespace Contrib.Profile.Controllers {
         private readonly IMembershipService _membershipService;
 
         public HomeController(IOrchardServices services,
-            IMembershipService membershipService
-            ) {
+            IMembershipService membershipService) {
 
             _membershipService = membershipService;
 
@@ -66,8 +65,7 @@ namespace Contrib.Profile.Controllers {
             return RedirectToAction("Edit");
         }
 
-        bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties)
-        {
+        bool IUpdateModel.TryUpdateModel<TModel>(TModel model, string prefix, string[] includeProperties, string[] excludeProperties) {
             return TryUpdateModel(model, prefix, includeProperties, excludeProperties);
         }
 
