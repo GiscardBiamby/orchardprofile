@@ -2,7 +2,7 @@ Name: Profile
 AntiForgery: enabled
 Author: André Rodrigues, Sébastien Ros
 Website: http://orchardproject.net
-Version: 1.1
+Version: 1.2
 OrchardVersion: 1.0
 Description: Adds a set of functionalities to display and edit users' profile.
 Features:

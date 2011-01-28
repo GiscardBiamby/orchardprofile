@@ -49,7 +49,7 @@ namespace Contrib.Profile.Controllers {
         }
 
         [HttpPost, ActionName("Edit")]
-        public ActionResult EditPost() {
+        public ActionResult EditPost(string returnUrl) {
             if (Services.WorkContext.CurrentUser == null) {
                 return HttpNotFound();
             }
@@ -63,6 +63,10 @@ namespace Contrib.Profile.Controllers {
             }
 
             Services.Notifier.Information(T("Your profile has been saved."));
+
+            if (!string.IsNullOrEmpty(returnUrl)) {
+                return Redirect(returnUrl);
+            }
 
             return RedirectToAction("Edit");
         }
