@@ -81,6 +81,7 @@
     <Compile Include="Migrations.cs" />
     <Compile Include="Permissions.cs" />
     <Compile Include="Routes.cs" />
+    <Compile Include="Security\AuthorizationEventHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Edit.cshtml" />

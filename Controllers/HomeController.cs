@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Orchard;
 using Orchard.ContentManagement;
 using Orchard.Localization;
@@ -24,10 +25,11 @@ namespace Contrib.Profile.Controllers {
         public Localizer T { get; set; }
 
         public ActionResult Index(string username) {
-            if (!Services.Authorizer.Authorize(Permissions.ViewProfiles, T("Not allowed to view profiles")))
-                return new HttpUnauthorizedResult();
-
             IUser user = _membershipService.GetUser(username);
+
+            if(user == null || !Services.Authorizer.Authorize(Permissions.ViewProfiles, user, null)) {
+                return HttpNotFound();
+            }
 
             dynamic shape = Services.ContentManager.BuildDisplay(user.ContentItem);
 

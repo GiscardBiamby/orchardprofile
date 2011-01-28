@@ -6,7 +6,8 @@ Version: 1.0
 OrchardVersion: 1.0
 Description: Adds a set of functionalities to display and edit users' profile.
 Features:
-    Profile:
+    Contrib.Profile:
+		Name: Profile
         Description: Adds a set of functionalities to display and edit users' profile.
-        Category: Content
+        Category: Social
         Dependencies: Orchard.Users

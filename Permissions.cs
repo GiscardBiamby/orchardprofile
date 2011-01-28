@@ -5,11 +5,13 @@ using Orchard.Security.Permissions;
 namespace Contrib.Profile {
     public class Permissions : IPermissionProvider {
         public static readonly Permission ViewProfiles = new Permission { Description = "View profiles", Name = "ViewProfiles" };
+        public static readonly Permission ViewOwnProfile = new Permission { Description = "View own profile", Name = "ViewOwnProfile", ImpliedBy = new [] { ViewProfiles }};
         public virtual Feature Feature { get; set; }
 
         public IEnumerable<Permission> GetPermissions() {
             return new[] {
-                ViewProfiles
+                ViewProfiles,
+                ViewOwnProfile
             };
         }
 
@@ -17,11 +19,10 @@ namespace Contrib.Profile {
             return new[] {
                 new PermissionStereotype {
                     Name = "Anonymous",
-                    Permissions = new[] {ViewProfiles}
                 },
                 new PermissionStereotype {
                     Name = "Authenticated",
-                    Permissions = new[] {ViewProfiles}
+                    Permissions = new[] {ViewOwnProfile}
                 },
                 new PermissionStereotype {
                     Name = "Administrator",
@@ -29,19 +30,19 @@ namespace Contrib.Profile {
                 },
                 new PermissionStereotype {
                     Name = "Editor",
-                    Permissions = new[] {ViewProfiles}
+                    Permissions = new[] {ViewOwnProfile}
                 },
                 new PermissionStereotype {
                     Name = "Moderator",
-                    Permissions = new[] {ViewProfiles}
+                    Permissions = new[] {ViewOwnProfile}
                 },
                 new PermissionStereotype {
                     Name = "Author",
-                    Permissions = new[] {ViewProfiles}
+                    Permissions = new[] {ViewOwnProfile}
                 },
                 new PermissionStereotype {
                     Name = "Contributor",
-                    Permissions = new[] {ViewProfiles}
+                    Permissions = new[] {ViewOwnProfile}
                 },
             };
         }
